@@ -21,7 +21,7 @@ MControlCenter is a Free and Open Source GNU/Linux application that allows you t
  - Change the maximum battery level limit
  - Advanced Fan Speed Control (Since version 0.4)
  - Change other settings such as keyboard backlight mode, USB Power Share, etc.
- - CLI support (Cooler Boost only)
+ - CLI support (Cooler Boost, Perf modes, Charging limit only)
 
 ## TODO
 
