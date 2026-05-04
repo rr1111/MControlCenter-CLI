@@ -16,6 +16,12 @@
  * with MControlCenter. If not, see <https://www.gnu.org/licenses/>.
  */
 #include "options.h"
+#include <algorithm>
+#include <cctype>
+#include <cstdlib>
+#include <cerrno>
+#include <climits>
+
 
 Options::Options()
     :cli(false), cooler_boost(std::nullopt)
@@ -28,11 +34,13 @@ Syntax: %s [options]
 
     -B, --coolerboost STATE             toggle fan cooler boost
     -M, --usermode MODE                 change user mode
+    -L, --chargelimit PERCENT           set charge limit
     -h                                  show help
 
 Arguments:
     STATE: can be 'ON', 'OFF' or 'TOGGLE'
     MODE: can be 'PERFORMANCE', 'BALANCED', 'SILENT', 'BATTERY', 'NEXT'
+    PERCENT: can be any percentage
 )", program_name.c_str());
     exit(1);
 }
@@ -104,6 +112,30 @@ void Options::process_args(int argc, char** argv)
                 }
 
             break;
+
+            case 'L':
+                cli = true;
+                {
+                    std::string s(optarg);
+                    if (!s.empty() && std::all_of(s.begin(), s.end(),
+                        [](unsigned char c){ return std::isdigit(c); }))
+                    {
+                        errno = 0;
+                        char *end = nullptr;
+                        unsigned long long val = std::strtoull(s.c_str(), &end, 10);
+                        if (errno == 0 && *end == '\0' && val > 0 && val <= ULLONG_MAX) {
+                            charge_limit = val;
+                        } else {
+                            fprintf(stderr, "Please enter a positive integer without sign.\n");
+                            print_help(argv[0]);
+                        }
+                    } else {
+                        fprintf(stderr, "Please enter a positive integer without sign.\n");
+                        print_help(argv[0]);
+                    }
+                }
+
+                break;
 
             case 'h': // -h or --help
             case '?': // Unrecognized option

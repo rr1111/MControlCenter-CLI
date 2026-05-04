@@ -41,6 +41,29 @@ CLI::CLI() {
 CLI::~CLI() {
 }
 
+void CLI::setChargeLimit(int percent) {
+    if (percent < 0 || percent > 100) {
+        fprintf(stderr, "Percent must be between 0 and 100.\n");
+        return;
+    }
+
+    if (operate.getBatteryThreshold() == percent) {
+        fprintf(stdout, "Charge limit already set to %d%%\n", percent);
+        return;
+    }
+
+    fprintf(stdout, "Setting charge limit to %d%%\n", percent);
+    operate.setBatteryThreshold(percent);
+
+    if (!operate.updateEcData()) {
+        fprintf(stderr, "Failed to update EC data for Charge Limit\n");
+    }
+
+    fprintf(stdout, "Charge limit set to %d%%\n", percent);
+}
+
+
+
 void CLI::setCoolerBoost(Options::State state){
     bool on = false;
     if(state == Options::State::TOGGLE){ // TOGGLE

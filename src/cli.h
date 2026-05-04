@@ -29,6 +29,7 @@ public:
 
     void setCoolerBoost(Options::State state);
     void changeUserMode(Options::Mode mode);
+    void setChargeLimit(int percent);
 };
 
 #endif // CLI_H

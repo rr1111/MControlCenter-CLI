@@ -43,6 +43,9 @@ int main(int argc, char *argv[]) {
         if(options.user_mode.has_value()){
             cli.changeUserMode(options.user_mode.value());
         }
+        if(options.charge_limit.has_value()){
+            cli.setChargeLimit(options.charge_limit.value());
+        }
 
         if (socket->isOpen()) {
             socket->write("update");
