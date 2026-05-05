@@ -35,10 +35,12 @@ Syntax: %s [options]
     -B, --coolerboost STATE             toggle fan cooler boost
     -M, --usermode MODE                 change user mode
     -L, --chargelimit PERCENT           set charge limit
+    -P, --usbpower STATE                toggle usb power sharing
 
     -b, --get-coolerboost               get current cooler boost STATE
     -m, --get-usermode                  get current user mode MODE
     -l, --get-chargelimit               get current charge limit PERCENT
+    -p, --get-usbpower                  get current usb power sharing STATE
 
     -h                                  show help
 
@@ -142,6 +144,27 @@ void Options::process_args(int argc, char** argv)
 
             break;
 
+            case 'P':
+                cli = true;
+
+                if(std::string(optarg) =="ON"){
+                    usb_power = std::optional<Options::State>{Options::State::ON};
+                }
+                else if(std::string(optarg) == "OFF")
+                {
+                    usb_power = std::optional<Options::State>{Options::State::OFF};
+                }
+                else if(std::string(optarg) == "TOGGLE")
+                {
+                    usb_power = std::optional<Options::State>{Options::State::TOGGLE};
+                }
+                else{
+                    fprintf(stderr, "Wrong TOGGLE value for USB power sharing option.\n");
+                    print_help(argv[0]);
+                }
+
+            break;
+
             case 'b':
                 cli = true;
                 get_cooler_boost = true;
@@ -157,6 +180,11 @@ void Options::process_args(int argc, char** argv)
             case 'l':
                 cli = true;
                 get_charge_limit = true;
+
+            case 'p':
+                cli = true;
+                get_usb_power = true;
+
 
                 break;
 

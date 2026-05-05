@@ -142,6 +142,24 @@ void CLI::setChargeLimit(int percent){
     fprintf(stdout, "Charge limit set to %d%%\n", percent);
 }
 
+void CLI::setUsbPower(Options::State state){
+    bool on = false;
+    if(state == Options::State::TOGGLE){ // TOGGLE
+        on = !operate.getUsbPowerShareState();
+    }
+    else{
+        on = state;
+    }
+
+    if(operate.getUsbPowerShareState() != on){
+        fprintf(stdout, "%s USB power sharing\n", ( on ? "Enabling" : "Disabling" ));
+        operate.setUsbPowerShareState(on);
+        if(!operate.updateEcData()) {
+            fprintf(stderr, "Failed to update EC data for USB power sharing\n");
+        }
+    }
+}
+
 std::string CLI::getCoolerBoost(){
     return operate.getCoolerBoostState() ? "ON" : "OFF";
 }
@@ -158,5 +176,9 @@ std::string CLI::getUserMode(){
 
 int CLI::getChargeLimit(){
     return operate.getBatteryThreshold();
+}
+
+std::string CLI::getUsbPower(){
+    return operate.getUsbPowerShareState() ? "ON" : "OFF";
 }
 

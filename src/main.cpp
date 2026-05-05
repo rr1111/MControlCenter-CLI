@@ -51,6 +51,10 @@ int main(int argc, char *argv[]) {
             cli.setChargeLimit(options.charge_limit.value());
             writeSocket = true;
         }
+        if(options.usb_power.has_value()){
+            cli.setUsbPower(options.usb_power.value());
+            writeSocket = true;
+        }
 
         if (options.get_cooler_boost) {
             fprintf(stdout, "%s\n", cli.getCoolerBoost().c_str());
@@ -60,6 +64,9 @@ int main(int argc, char *argv[]) {
         }
         if (options.get_charge_limit) {
             fprintf(stdout, "%d\n", cli.getChargeLimit());
+        }
+        if (options.get_usb_power) {
+            fprintf(stdout, "%s\n", cli.getUsbPower().c_str());
         }
 
 
