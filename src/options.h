@@ -45,18 +45,28 @@ public:
     int PERCENT;
 
     bool cli;
+
     std::optional<State> cooler_boost;
     std::optional<Mode> user_mode;
     std::optional<int> charge_limit;
 
+    bool get_cooler_boost = false;
+    bool get_user_mode    = false;
+    bool get_charge_limit = false;
+
     void process_args(int argc, char** argv);
 
 private:
-    static constexpr std::string_view const short_opts = "B:M:L:h";
+    static constexpr std::string_view const short_opts = "B:M:L:bmlh";
     static constexpr option long_opts[] = {
         {"coolerboost", required_argument, nullptr, 'B'},
         {"usermode",    required_argument, nullptr, 'M'},
         {"chargelimit",    required_argument, nullptr, 'L'},
+
+        {"get-coolerboost", no_argument, nullptr, 'b'},
+        {"get-usermode",    no_argument, nullptr, 'm'},
+        {"get-chargelimit",    no_argument, nullptr, 'l'},
+
         {"help",        no_argument,       nullptr, 'h'},
         {nullptr,       no_argument,       nullptr, 0}
     };

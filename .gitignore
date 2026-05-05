@@ -38,3 +38,4 @@ src/i18n/*
 # Generated build files
 compile_commands.json
 build/
+scripts/MControlCenter-0.5.1-bin/app/mcontrolcenter

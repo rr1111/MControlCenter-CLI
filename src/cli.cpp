@@ -41,28 +41,6 @@ CLI::CLI() {
 CLI::~CLI() {
 }
 
-void CLI::setChargeLimit(int percent) {
-    if (percent < 0 || percent > 100) {
-        fprintf(stderr, "Percent must be between 0 and 100.\n");
-        return;
-    }
-
-    if (operate.getBatteryThreshold() == percent) {
-        fprintf(stdout, "Charge limit already set to %d%%\n", percent);
-        return;
-    }
-
-    fprintf(stdout, "Setting charge limit to %d%%\n", percent);
-    operate.setBatteryThreshold(percent);
-
-    if (!operate.updateEcData()) {
-        fprintf(stderr, "Failed to update EC data for Charge Limit\n");
-    }
-
-    fprintf(stdout, "Charge limit set to %d%%\n", percent);
-}
-
-
 
 void CLI::setCoolerBoost(Options::State state){
     bool on = false;
@@ -82,31 +60,32 @@ void CLI::setCoolerBoost(Options::State state){
     }
 }
 
-void CLI::changeUserMode(Options::Mode mode){
+void CLI::changeUserMode(Options::Mode mode)
+{
     Options::Mode change_mode = mode;
 
     if(mode == Options::Mode::NEXT){
         user_mode cur_mode = operate.getUserMode();
         switch (cur_mode) {
-            case user_mode::performance_mode:
-                change_mode = Options::Mode::BALANCED;
-                break;
+        case user_mode::performance_mode:
+            change_mode = Options::Mode::BALANCED;
+            break;
 
-            case user_mode::balanced_mode:
-                change_mode = Options::Mode::SILENT;
-                break;
+        case user_mode::balanced_mode:
+            change_mode = Options::Mode::SILENT;
+            break;
 
-            case user_mode::silent_mode:
-                change_mode = Options::Mode::BATTERY;
-                break;
+        case user_mode::silent_mode:
+            change_mode = Options::Mode::BATTERY;
+            break;
 
-            case user_mode::super_battery_mode:
-                change_mode = Options::Mode::PERFORMANCE;
-                break;
+        case user_mode::super_battery_mode:
+            change_mode = Options::Mode::PERFORMANCE;
+            break;
 
-            case user_mode::unknown_mode:
-                change_mode = Options::Mode::PERFORMANCE;
-                fprintf(stderr, "Unknown User Mode detected\n");
+        case user_mode::unknown_mode:
+            change_mode = Options::Mode::PERFORMANCE;
+            fprintf(stderr, "Unknown User Mode detected\n");
         }
     }
 
@@ -114,25 +93,25 @@ void CLI::changeUserMode(Options::Mode mode){
     std::string text_mode;
 
     switch (change_mode){
-        case Options::Mode::PERFORMANCE:
-            user_mode = user_mode::performance_mode;
-            text_mode = "Performance";
-            break;
-        
-        case Options::Mode::BALANCED:
-            user_mode = user_mode::balanced_mode;
-            text_mode = "Balanced";
-            break;
-        
-        case Options::Mode::SILENT:
-            user_mode = user_mode::silent_mode;
-            text_mode = "Silent";
-            break;
-        
-        case Options::Mode::BATTERY:
-            user_mode = user_mode::super_battery_mode;
-            text_mode = "Super Battery";
-            break;
+    case Options::Mode::PERFORMANCE:
+        user_mode = user_mode::performance_mode;
+        text_mode = "Performance";
+        break;
+
+    case Options::Mode::BALANCED:
+        user_mode = user_mode::balanced_mode;
+        text_mode = "Balanced";
+        break;
+
+    case Options::Mode::SILENT:
+        user_mode = user_mode::silent_mode;
+        text_mode = "Silent";
+        break;
+
+    case Options::Mode::BATTERY:
+        user_mode = user_mode::super_battery_mode;
+        text_mode = "Super Battery";
+        break;
     }
 
     fprintf(stdout, "Changing User Mode to %s Mode\n", ( text_mode.c_str() ));
@@ -141,3 +120,43 @@ void CLI::changeUserMode(Options::Mode mode){
         fprintf(stderr, "Failed to update EC data for User Mode\n");
     }
 }
+
+void CLI::setChargeLimit(int percent){
+    if (percent < 0 || percent > 100){
+        fprintf(stderr, "Percent must be between 0 and 100.\n");
+        return;
+    }
+
+    if (operate.getBatteryThreshold() == percent){
+        fprintf(stdout, "Charge limit already set to %d%%\n", percent);
+        return;
+    }
+
+    fprintf(stdout, "Setting charge limit to %d%%\n", percent);
+    operate.setBatteryThreshold(percent);
+
+    if (!operate.updateEcData()){
+        fprintf(stderr, "Failed to update EC data for Charge Limit\n");
+    }
+
+    fprintf(stdout, "Charge limit set to %d%%\n", percent);
+}
+
+std::string CLI::getCoolerBoost(){
+    return operate.getCoolerBoostState() ? "ON" : "OFF";
+}
+
+std::string CLI::getUserMode(){
+    switch (operate.getUserMode()){
+        case user_mode::performance_mode:       return "PERFORMANCE";
+        case user_mode::balanced_mode:          return "BALANCED";
+        case user_mode::silent_mode:            return "SILENT";
+        case user_mode::super_battery_mode:     return "BATTERY";
+        default:                                return "UNKNOWN";
+    }
+}
+
+int CLI::getChargeLimit(){
+    return operate.getBatteryThreshold();
+}
+

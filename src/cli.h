@@ -30,6 +30,10 @@ public:
     void setCoolerBoost(Options::State state);
     void changeUserMode(Options::Mode mode);
     void setChargeLimit(int percent);
+
+    std::string getCoolerBoost();
+    std::string getUserMode ();
+    int getChargeLimit();
 };
 
 #endif // CLI_H

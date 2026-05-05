@@ -35,19 +35,35 @@ int main(int argc, char *argv[]) {
     socket->connectToServer(serverName);
 
     if(options.cli){
+        // dont update ui on get
+        bool writeSocket = false;
         fprintf(stderr, "Executing CLI commands...\n");
         CLI cli;
         if(options.cooler_boost.has_value()){
             cli.setCoolerBoost(options.cooler_boost.value());
+            writeSocket = true;
         }
         if(options.user_mode.has_value()){
             cli.changeUserMode(options.user_mode.value());
+            writeSocket = true;
         }
         if(options.charge_limit.has_value()){
             cli.setChargeLimit(options.charge_limit.value());
+            writeSocket = true;
         }
 
-        if (socket->isOpen()) {
+        if (options.get_cooler_boost) {
+            fprintf(stdout, "%s\n", cli.getCoolerBoost().c_str());
+        }
+        if (options.get_user_mode) {
+            fprintf(stdout, "%s\n", cli.getUserMode().c_str());
+        }
+        if (options.get_charge_limit) {
+            fprintf(stdout, "%d\n", cli.getChargeLimit());
+        }
+
+
+        if (writeSocket && socket->isOpen()) {
             socket->write("update");
             socket->flush();
             socket->close();

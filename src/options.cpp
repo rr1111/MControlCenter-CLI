@@ -35,12 +35,17 @@ Syntax: %s [options]
     -B, --coolerboost STATE             toggle fan cooler boost
     -M, --usermode MODE                 change user mode
     -L, --chargelimit PERCENT           set charge limit
+
+    -b, --get-coolerboost               get current cooler boost STATE
+    -m, --get-usermode                  get current user mode MODE
+    -l, --get-chargelimit               get current charge limit PERCENT
+
     -h                                  show help
 
 Arguments:
     STATE: can be 'ON', 'OFF' or 'TOGGLE'
     MODE: can be 'PERFORMANCE', 'BALANCED', 'SILENT', 'BATTERY', 'NEXT'
-    PERCENT: can be any percentage
+    PERCENT: can be any percentage (positive number)
 )", program_name.c_str());
     exit(1);
 }
@@ -134,6 +139,24 @@ void Options::process_args(int argc, char** argv)
                         print_help(argv[0]);
                     }
                 }
+
+            break;
+
+            case 'b':
+                cli = true;
+                get_cooler_boost = true;
+
+            break;
+
+            case 'm':
+                cli = true;
+                get_user_mode = true;
+
+            break;
+
+            case 'l':
+                cli = true;
+                get_charge_limit = true;
 
                 break;
 
