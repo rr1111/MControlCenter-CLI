@@ -160,6 +160,24 @@ void CLI::setUsbPower(Options::State state){
     }
 }
 
+void CLI::setFnSuperSwap(Options::State state){
+    bool on = false;
+    if(state == Options::State::TOGGLE){ // TOGGLE
+        on = !operate.getFnSuperSwapState();
+    }
+    else{
+        on = state;
+    }
+
+    if(operate.getFnSuperSwapState() != on){
+        fprintf(stdout, "%s Fn <-> Super swap\n", ( on ? "Enabling" : "Disabling" ));
+        operate.setFnSuperSwapState(on);
+        if(!operate.updateEcData()) {
+            fprintf(stderr, "Failed to update EC data for Fn <-> Super swap\n");
+        }
+    }
+}
+
 std::string CLI::getCoolerBoost(){
     return operate.getCoolerBoostState() ? "ON" : "OFF";
 }
@@ -178,7 +196,12 @@ int CLI::getChargeLimit(){
     return operate.getBatteryThreshold();
 }
 
-std::string CLI::getUsbPower(){
+std::string CLI::getUsbPower()
+{
     return operate.getUsbPowerShareState() ? "ON" : "OFF";
+}
+
+std::string CLI::getFnSuperSwap(){
+    return operate.getFnSuperSwapState() ? "ON" : "OFF";
 }
 

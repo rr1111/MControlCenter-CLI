@@ -36,11 +36,13 @@ Syntax: %s [options]
     -M, --usermode MODE                 change user mode
     -L, --chargelimit PERCENT           set charge limit
     -P, --usbpower STATE                toggle usb power sharing
+    -S, --fnsuperswap STATE             toggle fn <-> super swap
 
     -b, --get-coolerboost               get current cooler boost STATE
     -m, --get-usermode                  get current user mode MODE
     -l, --get-chargelimit               get current charge limit PERCENT
     -p, --get-usbpower                  get current usb power sharing STATE
+    -s, --get-fnsuperswap               get current fn <-> super swap STATE
 
     -h                                  show help
 
@@ -165,6 +167,27 @@ void Options::process_args(int argc, char** argv)
 
             break;
 
+            case 'S':
+                cli = true;
+
+                if(std::string(optarg) =="ON"){
+                    fnsuper_swap = std::optional<Options::State>{Options::State::ON};
+                }
+                else if(std::string(optarg) == "OFF")
+                {
+                    fnsuper_swap = std::optional<Options::State>{Options::State::OFF};
+                }
+                else if(std::string(optarg) == "TOGGLE")
+                {
+                    fnsuper_swap = std::optional<Options::State>{Options::State::TOGGLE};
+                }
+                else{
+                    fprintf(stderr, "Wrong TOGGLE value for Fn <-> Super swap option.\n");
+                    print_help(argv[0]);
+                }
+
+            break;
+
             case 'b':
                 cli = true;
                 get_cooler_boost = true;
@@ -186,6 +209,12 @@ void Options::process_args(int argc, char** argv)
             case 'p':
                 cli = true;
                 get_usb_power = true;
+
+            break;
+
+            case 's':
+                cli = true;
+                get_fnsuper_swap = true;
 
             break;
 

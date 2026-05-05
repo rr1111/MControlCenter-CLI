@@ -50,26 +50,30 @@ public:
     std::optional<Mode> user_mode;
     std::optional<int> charge_limit;
     std::optional<State> usb_power;
+    std::optional<State> fnsuper_swap;
 
     bool get_cooler_boost = false;
     bool get_user_mode    = false;
     bool get_charge_limit = false;
     bool get_usb_power    = false;
+    bool get_fnsuper_swap = false;
 
     void process_args(int argc, char** argv);
 
 private:
-    static constexpr std::string_view const short_opts = "B:M:L:P:bmlph";
+    static constexpr std::string_view const short_opts = "B:M:L:P:S:bmlpsh";
     static constexpr option long_opts[] = {
         {"coolerboost", required_argument, nullptr, 'B'},
         {"usermode",    required_argument, nullptr, 'M'},
         {"chargelimit",    required_argument, nullptr, 'L'},
         {"usbpower",    required_argument, nullptr, 'P'},
+        {"fnsuperswap",    required_argument, nullptr, 'S'},
 
         {"get-coolerboost", no_argument, nullptr, 'b'},
         {"get-usermode",    no_argument, nullptr, 'm'},
         {"get-chargelimit",    no_argument, nullptr, 'l'},
         {"get-usbpower",    no_argument, nullptr, 'p'},
+        {"get-fnsuperswap",    no_argument, nullptr, 's'},
 
         {"help",        no_argument,       nullptr, 'h'},
         {nullptr,       no_argument,       nullptr, 0}

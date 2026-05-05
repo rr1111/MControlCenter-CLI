@@ -55,6 +55,10 @@ int main(int argc, char *argv[]) {
             cli.setUsbPower(options.usb_power.value());
             writeSocket = true;
         }
+        if(options.fnsuper_swap.has_value()){
+            cli.setFnSuperSwap(options.fnsuper_swap.value());
+            writeSocket = true;
+        }
 
         if (options.get_cooler_boost) {
             fprintf(stdout, "%s\n", cli.getCoolerBoost().c_str());
@@ -67,6 +71,9 @@ int main(int argc, char *argv[]) {
         }
         if (options.get_usb_power) {
             fprintf(stdout, "%s\n", cli.getUsbPower().c_str());
+        }
+        if (options.get_fnsuper_swap) {
+            fprintf(stdout, "%s\n", cli.getFnSuperSwap().c_str());
         }
 
 

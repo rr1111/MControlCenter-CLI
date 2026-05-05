@@ -31,11 +31,13 @@ public:
     void changeUserMode(Options::Mode mode);
     void setChargeLimit(int percent);
     void setUsbPower(Options::State state);
+    void setFnSuperSwap(Options::State state);
 
     std::string getCoolerBoost();
     std::string getUserMode ();
     int getChargeLimit();
     std::string getUsbPower();
+    std::string getFnSuperSwap();
 };
 
 #endif // CLI_H
