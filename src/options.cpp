@@ -181,12 +181,13 @@ void Options::process_args(int argc, char** argv)
                 cli = true;
                 get_charge_limit = true;
 
+            break;
+
             case 'p':
                 cli = true;
                 get_usb_power = true;
 
-
-                break;
+            break;
 
             case 'h': // -h or --help
             case '?': // Unrecognized option
